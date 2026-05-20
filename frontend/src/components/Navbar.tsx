@@ -6,6 +6,7 @@ import {
   Moon,
   Sun,
   Settings,
+  Receipt,
   LogOut,
   User,
   Droplets,
@@ -175,7 +176,7 @@ export default function Navbar() {
                     <p
                       className={`text-sm font-semibold ${isDark ? "text-slate-300" : "text-slate-700"}`}
                     >
-                   {user?.name}
+                      {user?.name}
                     </p>
                     <p
                       className={`text-xs mt-0.5 ${isDark ? "text-slate-500" : "text-slate-400"}`}
@@ -203,6 +204,21 @@ export default function Navbar() {
                       Profile
                     </button>
 
+                    <button
+                      onClick={() => navigate("/bill")}
+                      className={`
+                        w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 transition-colors
+                        ${
+                          isDark
+                            ? "text-slate-300 hover:bg-slate-800"
+                            : "text-slate-700 hover:bg-slate-50"
+                        }
+                      `}
+                    >
+                      <Receipt className="w-4 h-4 opacity-60" />
+                      Billings
+                    </button>
+
                     {/* SETTINGS */}
                     <button
                       onClick={() => navigate("/settings")}
@@ -228,7 +244,7 @@ export default function Navbar() {
                       onClick={() => {
                         clearUser();
                         setPhoneNumber("");
-                         toast.success("Logged out successfully!");
+                        toast.success("Logged out successfully!");
                         navigate("/login");
                       }}
                       className={`

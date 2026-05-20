@@ -6,6 +6,7 @@ import Dashboard from "../components/Dashboard";
 import Profile from "../components/Profile";
 import Setting from "../components/Setting";
 import SignupScreen from "../components/SignupScreen";
+import BillSection from "../components/BillSection"
 import { useMilkStore } from "../store/useMilkStore";
 
 export default function AppRoutes() {
@@ -54,6 +55,10 @@ export default function AppRoutes() {
      <Route
        path="/profile"
        element={!user ? <Navigate to="/login" replace /> : <Profile />}
+     />
+     <Route
+       path="/bill"
+       element={!user ? <Navigate to="/login" replace /> : <BillSection />}
      />
 
      <Route

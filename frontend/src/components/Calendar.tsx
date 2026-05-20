@@ -1,20 +1,6 @@
 import { useMilkStore } from "../store/useMilkStore";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
+import { MONTHS } from "../constants/month";
 const DAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
 export default function Calendar() {

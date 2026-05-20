@@ -1,17 +1,4 @@
-export const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { MONTHS } from "../constants/month";
 
 export const generateMonthOptions = () => {
   const today = new Date();

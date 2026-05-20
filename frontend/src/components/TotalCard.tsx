@@ -6,20 +6,7 @@ import { Droplets, IndianRupee, XCircle } from "lucide-react";
 
 import { getMonthSummary } from "../services/record.service";
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { MONTHS } from "../constants/month";
 
 export default function TotalCard() {
   const user = useMilkStore((state) => state.user);

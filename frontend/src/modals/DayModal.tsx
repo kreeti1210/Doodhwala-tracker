@@ -2,21 +2,7 @@ import { useEffect, useState } from "react";
 import { useMilkStore } from "../store/useMilkStore";
 import toast from "react-hot-toast";
 import { getRecordByDate, saveRecord } from "../services/record.service";
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { MONTHS } from "../constants/month";
 
 export default function DayModal() {
     const user = useMilkStore((state) => state.user);
