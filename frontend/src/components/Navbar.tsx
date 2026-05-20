@@ -11,6 +11,7 @@ import {
   Droplets,
   ChevronDown,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const MONTH_OPTIONS = generateMonthOptions();
 
@@ -227,6 +228,7 @@ export default function Navbar() {
                       onClick={() => {
                         clearUser();
                         setPhoneNumber("");
+                         toast.success("Logged out successfully!");
                         navigate("/login");
                       }}
                       className={`

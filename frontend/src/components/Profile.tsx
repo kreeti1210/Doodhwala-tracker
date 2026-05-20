@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useMilkStore } from "../store/useMilkStore";
 import OtpModal from "../modals/OptModal";
 import { updateUser } from "../services/user.service";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -31,15 +32,15 @@ export default function Profile() {
 
       const response = await updateUser(user.id, {
         name,
-
         preferredVendorName: vendorName,
-
         address,
       });
 
       setUser(response.data);
+       toast.success("Changes Saved!");
     } catch (error) {
       console.error(error);
+       toast.error("Error saving changes!");
     } finally {
       setLoading(false);
     }

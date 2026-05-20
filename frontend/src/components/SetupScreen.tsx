@@ -3,6 +3,7 @@ import { useMilkStore } from "../store/useMilkStore";
 import { Zap, CalendarDays } from "lucide-react";
 import { updateUser } from "../services/user.service";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SetupScreen() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ export default function SetupScreen() {
         ).toISOString(),
       });
       setUser(response.data);
+      toast.success("Signup successful!")
       navigate("/dashboard");
     } catch (error) {
       console.error(error);

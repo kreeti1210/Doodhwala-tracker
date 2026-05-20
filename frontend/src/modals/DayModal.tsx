@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-
 import { useMilkStore } from "../store/useMilkStore";
-
+import toast from "react-hot-toast";
 import { getRecordByDate, saveRecord } from "../services/record.service";
 
 const MONTHS = [
@@ -20,47 +19,31 @@ const MONTHS = [
 ];
 
 export default function DayModal() {
-  const user = useMilkStore((state) => state.user);
-
+    const user = useMilkStore((state) => state.user);
   const [loading, setLoading] = useState(false);
-
   const selectedDay = useMilkStore((state) => state.selectedDay);
-
   const setSelectedDay = useMilkStore((state) => state.setSelectedDay);
-
   const selectedMonth = useMilkStore((state) => state.selectedMonth);
-
   const pricePerLiter = useMilkStore((state) => state.pricePerLiter);
-
   const defaultQuantity = useMilkStore((state) => state.defaultQuantity);
-
   const theme = useMilkStore((state) => state.theme);
-
   const [quantity, setQuantity] = useState(defaultQuantity);
-
   const [isAbsent, setIsAbsent] = useState(false);
-
   if (!selectedDay) {
     return null;
   }
 
   const [monthName, year] = selectedMonth.split(" ");
-
   const monthIndex = MONTHS.indexOf(monthName);
-
   const formattedDate = `${year}-${String(monthIndex + 1).padStart(
     2,
     "0",
   )}-${String(selectedDay).padStart(2, "0")}`;
 
   const selectedDate = new Date(formattedDate);
-
   const setupDate = new Date(user.deliveryStartDate || user.createdAt);
-
   setupDate.setHours(0, 0, 0, 0);
-
   selectedDate.setHours(0, 0, 0, 0);
-
   const isBeforeSetupDate = selectedDate < setupDate;
 
   useEffect(() => {
@@ -68,26 +51,20 @@ export default function DayModal() {
       try {
         if (isBeforeSetupDate) {
           setQuantity(0);
-
           setIsAbsent(true);
-
           return;
         }
 
         const response = await getRecordByDate(user.id, formattedDate);
-
         const existingRecord = response.data;
-
         if (existingRecord) {
           setQuantity(existingRecord.quantity);
-
           setIsAbsent(existingRecord.status === "absent");
-
           return;
         }
 
         setQuantity(defaultQuantity);
-
+        
         setIsAbsent(false);
       } catch (error) {
         console.error(error);
@@ -103,29 +80,24 @@ export default function DayModal() {
     if (isBeforeSetupDate) {
       return;
     }
-
     try {
       setLoading(true);
 
     const response = await saveRecord({
-      userId: user.id,
-
+            userId: user.id,
       date: formattedDate,
-
       quantity: isAbsent ? 0 : quantity,
-
       pricePerLiter,
-
       status: isAbsent ? "absent" : "delivered",
     });
-
+     toast.success("Changes Saved!");
     if (response?.data) {
       window.dispatchEvent(new Event("recordsUpdated"));
     }
-
     setSelectedDay(null);
     } catch (error) {
       console.error(error);
+       toast.error("Error saving Changes!");
     } finally {
       setLoading(false);
     }

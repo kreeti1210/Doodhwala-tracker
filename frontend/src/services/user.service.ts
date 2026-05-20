@@ -16,6 +16,21 @@ export const createUser = async (phoneNumber: string, name?: string) => {
 
   return response.json();
 };
+export const loginUser = async (phoneNumber: string) => {
+  const response = await fetch(`${API_BASE_URL}/users/login`, {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify({
+      phoneNumber,
+    }),
+  });
+
+  return response.json();
+};
 
 export const getUserById = async (userId: string) => {
   const response = await fetch(`${API_BASE_URL}/users/${userId}`);

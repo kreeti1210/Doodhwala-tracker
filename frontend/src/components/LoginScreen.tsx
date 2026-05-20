@@ -1,39 +1,43 @@
 import { useNavigate } from "react-router-dom";
 import { useMilkStore } from "../store/useMilkStore";
-import { createUser } from "../services/user.service";
+import { createUser, loginUser } from "../services/user.service";
 
 import { Droplets } from "lucide-react";
-import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
-
   const theme = useMilkStore((state) => state.theme);
-
   const setUser = useMilkStore((state) => state.setUser);
-
   const phoneNumber = useMilkStore((state) => state.phoneNumber);
-
   const setPhoneNumber = useMilkStore((state) => state.setPhoneNumber);
-
-
   const handleContinue = async () => {
+  
     try {
-      const response = await createUser(phoneNumber);
+    if (!phoneNumber) {
+      toast.error("Please enter phone number");
+      return;
+    }
 
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      toast.error("Phone number must be 10 digits");
+      return;
+    }
+      
+      const response = await loginUser(phoneNumber);
       const userData = response.data;
-
       setUser(userData);
 
       if (userData.hasCompletedSetup) {
+        toast.success("Logged In back successfully!");
         navigate("/dashboard");
-
         return;
       }
-
       navigate("/setup");
     } catch (error) {
       console.error(error);
+
+      toast.error("Failed to login");
     }
   };
 
@@ -150,7 +154,8 @@ export default function LoginScreen() {
                 type="tel"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="9876543210"
+                placeholder="Enter your number"
+                required
                 className={
                   theme === "light"
                     ? "bg-transparent flex-1 outline-none text-slate-700 placeholder:text-slate-300"

@@ -4,6 +4,7 @@ import {
   getUserByIdService,
   updateUserService,
   deleteUserService,
+  loginUserService,
 } from "../services/user.service";
 
 export const createUser = async (req: Request, res: Response) => {
@@ -27,6 +28,26 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to create user",
+    });
+  }
+};
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const { phoneNumber } = req.body;
+
+    const user = await loginUserService(phoneNumber);
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(404).json({
+      success: false,
+      message: "Phone number not registered",
     });
   }
 };

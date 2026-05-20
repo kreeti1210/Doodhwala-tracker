@@ -1,12 +1,9 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import { Droplets } from "lucide-react";
-
 import { useMilkStore } from "../store/useMilkStore";
-
 import { createUser } from "../services/user.service";
+import toast from "react-hot-toast";
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -23,15 +20,25 @@ export default function SignupScreen() {
 
   const handleSignup = async () => {
     try {
+      if(!phoneNumber || !name)
+      {
+       toast.error("Must enter both fields");
+      }
+      if (!/^\d{10}$/.test(phoneNumber)) {
+        toast.error("Phone number must be 10 digits");
+        return;
+      }
+      if (!/^\d{10}$/.test(phoneNumber)) {
+        toast.error("Phone number must be 10 digits");
+        return;
+      }
       const response = await createUser(phoneNumber, name);
-
       const userData = response.data;
-
       setUser(userData);
-
       navigate("/setup");
     } catch (error) {
       console.error(error);
+      toast.error("Error creating user!")
     }
   };
 
@@ -136,6 +143,7 @@ export default function SignupScreen() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
+                required
                 className={
                   theme === "light"
                     ? "bg-transparent flex-1 outline-none text-slate-700 placeholder:text-slate-300"
@@ -177,7 +185,8 @@ export default function SignupScreen() {
                 type="tel"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="9876543210"
+                placeholder="Enter your number"
+                required
                 className={
                   theme === "light"
                     ? "bg-transparent flex-1 outline-none text-slate-700 placeholder:text-slate-300"

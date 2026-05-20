@@ -3,6 +3,7 @@ import { ArrowLeft, Sun,Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useMilkStore } from "../store/useMilkStore";
 import SettingsConfirmModal from "../modals/SettingsConfirmModal";
+import toast from "react-hot-toast";
 
 export default function Setting() {
   const navigate = useNavigate();
@@ -250,7 +251,7 @@ export default function Setting() {
             setDefaultQuantity(quantity);
 
             setPricePerLiter(rate);
-
+             toast.success("Changes Saved!");
             setShowModal(false);
           }}
           onClose={() => setShowModal(false)}

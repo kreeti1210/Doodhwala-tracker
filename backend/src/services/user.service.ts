@@ -41,7 +41,19 @@ export const createUserService = async ({
 
   return user;
 };
+export const loginUserService = async (phoneNumber: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      phoneNumber,
+    },
+  });
 
+  if (!user) {
+    throw new Error("User does not exist");
+  }
+
+  return user;
+};
 export const getUserByIdService = async (id: string) => {
   return prisma.user.findUnique({
     where: {
