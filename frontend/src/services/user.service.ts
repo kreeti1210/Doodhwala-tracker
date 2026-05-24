@@ -59,3 +59,23 @@ export const deleteUser = async (userId: string) => {
 
   return response.json();
 };
+
+export const updatePhoneNumber = async (
+  userId: string,
+  phoneNumber: string,
+) => {
+  const response = await fetch(`${API_BASE_URL}/users/change-phone-number`, {
+    method: "PATCH",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify({
+      userId,
+      phoneNumber,
+    }),
+  });
+
+  return response.json();
+};

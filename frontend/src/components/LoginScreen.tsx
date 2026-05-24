@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useMilkStore } from "../store/useMilkStore";
-import { createUser, loginUser } from "../services/user.service";
+import { loginUser } from "../services/user.service";
+import { sendOtp } from "../services/auth.service";
+import OtpModal from "../modals/OptModal";
 
 import { Droplets } from "lucide-react";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
@@ -11,36 +14,54 @@ export default function LoginScreen() {
   const setUser = useMilkStore((state) => state.setUser);
   const phoneNumber = useMilkStore((state) => state.phoneNumber);
   const setPhoneNumber = useMilkStore((state) => state.setPhoneNumber);
-  const handleContinue = async () => {
-  
-    try {
-    if (!phoneNumber) {
-      toast.error("Please enter phone number");
-      return;
-    }
+  const [showOtpModal, setShowOtpModal] = useState(false);
+ const handleContinue = async () => {
+   try {
+     if (!phoneNumber) {
+       toast.error("Please enter phone number");
+       return;
+     }
+     if (!/^\d{10}$/.test(phoneNumber)) {
+       toast.error("Phone number must be 10 digits");
+       return;
+     }
 
-    if (!/^\d{10}$/.test(phoneNumber)) {
-      toast.error("Phone number must be 10 digits");
-      return;
-    }
-      
-      const response = await loginUser(phoneNumber);
-      const userData = response.data;
-      setUser(userData);
+     const response = await loginUser(phoneNumber);
 
-      if (userData.hasCompletedSetup) {
-        toast.success("Logged In back successfully!");
-        navigate("/dashboard");
-        return;
-      }
-      navigate("/setup");
-    } catch (error) {
-      console.error(error);
+     if (!response.success) {
+       toast.error(response.message || "Account not found");
+       return;
+     }
 
-      toast.error("Failed to login");
-    }
-  };
+     await sendOtp(phoneNumber);
+     toast.success("OTP sent");
 
+     setShowOtpModal(true);
+   } catch (error) {
+     console.error(error);
+     toast.error("Failed to send OTP");
+   }
+ };
+
+
+ const handleOtpVerified = async () => {
+   try {
+     const response = await loginUser(phoneNumber);
+     const userData = response.data;
+     setUser(userData);
+     toast.success("Logged in successfully");
+
+     if (userData.hasCompletedSetup) {
+       navigate("/dashboard");
+       return;
+     }
+     navigate("/setup");
+   } catch (error) {
+     console.error(error);
+
+     toast.error("Login failed");
+   }
+ };
   return (
     <div
       className={`
@@ -173,17 +194,6 @@ export default function LoginScreen() {
             Continue
           </button>
 
-          {/* FOOTER */}
-          <p
-            className={
-              theme === "light"
-                ? "text-center text-xs text-slate-300 mt-5"
-                : "text-center text-xs text-slate-500 mt-5"
-            }
-          >
-            OTP verification coming soon
-          </p>
-
           <button
             onClick={() => navigate("/signup")}
             className={
@@ -196,6 +206,15 @@ export default function LoginScreen() {
           </button>
         </div>
       </div>
+      {showOtpModal && (
+        <OtpModal
+          title="Verify OTP"
+          subtitle={`Enter the OTP sent to +91 ${phoneNumber}`}
+          phoneNumber={phoneNumber}
+          onVerified={handleOtpVerified}
+          onClose={() => setShowOtpModal(false)}
+        />
+      )}
     </div>
   );
 }

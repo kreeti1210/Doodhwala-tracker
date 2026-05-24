@@ -2,45 +2,60 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Droplets } from "lucide-react";
 import { useMilkStore } from "../store/useMilkStore";
-import { createUser } from "../services/user.service";
+import { createUser} from "../services/user.service";
+import { sendOtp } from "../services/auth.service";
+import OtpModal from "../modals/OptModal";
 import toast from "react-hot-toast";
 
 export default function SignupScreen() {
   const navigate = useNavigate();
-
   const theme = useMilkStore((state) => state.theme);
-
   const setUser = useMilkStore((state) => state.setUser);
-
   const phoneNumber = useMilkStore((state) => state.phoneNumber);
-
   const setPhoneNumber = useMilkStore((state) => state.setPhoneNumber);
-
   const [name, setName] = useState("");
+  const [showOtpModal, setShowOtpModal] = useState(false);
 
-  const handleSignup = async () => {
-    try {
-      if(!phoneNumber || !name)
-      {
-       toast.error("Must enter both fields");
-      }
-      if (!/^\d{10}$/.test(phoneNumber)) {
-        toast.error("Phone number must be 10 digits");
-        return;
-      }
-      if (!/^\d{10}$/.test(phoneNumber)) {
-        toast.error("Phone number must be 10 digits");
-        return;
-      }
-      const response = await createUser(phoneNumber, name);
-      const userData = response.data;
-      setUser(userData);
-      navigate("/setup");
-    } catch (error) {
-      console.error(error);
-      toast.error("Error creating user!")
+const handleSignup = async () => {
+  try {
+    if (!phoneNumber || !name) {
+      toast.error("Must enter both fields");
+            return;
     }
-  };
+
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      toast.error("Phone number must be 10 digits");
+      return;
+    }
+
+    await sendOtp(phoneNumber);
+    toast.success("OTP sent");
+
+    setShowOtpModal(true);
+  } catch (error) {
+    console.error(error);
+
+    toast.error("Failed to send OTP");
+  }
+};
+
+const handleOtpVerified = async () => {
+  try {
+    const response = await createUser(phoneNumber, name);
+
+    const userData = response.data;
+
+    setUser(userData);
+
+    toast.success("Account created successfully");
+
+    navigate("/setup");
+  } catch (error) {
+    console.error(error);
+
+    toast.error("Failed to create account");
+  }
+};
 
   return (
     <div
@@ -215,6 +230,15 @@ export default function SignupScreen() {
           </button>
         </div>
       </div>
+      {showOtpModal && (
+        <OtpModal
+          title="Verify OTP"
+          subtitle={`Enter the OTP sent to +91 ${phoneNumber}`}
+          phoneNumber={phoneNumber}
+          onVerified={handleOtpVerified}
+          onClose={() => setShowOtpModal(false)}
+        />
+      )}
     </div>
   );
 }

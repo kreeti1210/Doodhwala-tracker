@@ -17,7 +17,7 @@ type UpdateUserParams = {
 export const createUserService = async ({
   phoneNumber,
   name,
-  deliveryStartDate
+  deliveryStartDate,
 }: CreateUserParams) => {
   const existingUser = await prisma.user.findUnique({
     where: {
@@ -74,6 +74,31 @@ export const deleteUserService = async (id: string) => {
   return prisma.user.delete({
     where: {
       id,
+    },
+  });
+};
+
+export const updatePhoneNumberService = async (
+  userId: string,
+  phoneNumber: string,
+) => {
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      phoneNumber,
+    },
+  });
+
+  if (existingUser) {
+    throw new Error("Phone number already exists");
+  }
+
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+
+    data: {
+      phoneNumber,
     },
   });
 };

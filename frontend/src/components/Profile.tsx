@@ -2,30 +2,48 @@ import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useMilkStore } from "../store/useMilkStore";
+import { sendOtp } from "../services/auth.service";
 import OtpModal from "../modals/OptModal";
-import { updateUser } from "../services/user.service";
+import DeleteAccountModal from "../modals/DeleteAccountModal";
+import { updateUser, updatePhoneNumber,deleteUser} from "../services/user.service";
 import toast from "react-hot-toast";
+import NewPhoneModal from "../modals/NewPhoneModal";
+
+import ConfirmPhoneModal from "../modals/ConfirmPhoneModal";
 
 export default function Profile() {
   const navigate = useNavigate();
   const phoneNumber = useMilkStore((state) => state.phoneNumber);
-
   const setUser = useMilkStore((state) => state.setUser);
-
+  const setPhoneNumber = useMilkStore((state) => state.setPhoneNumber);
   const theme = useMilkStore((state) => state.theme);
-
   const user = useMilkStore((state) => state.user);
-
   const [name, setName] = useState(user?.name || "");
-
   const [vendorName, setVendorName] = useState(user?.preferredVendorName || "");
-
   const [address, setAddress] = useState(user?.address || "");
-
   const [showOtpModal, setShowOtpModal] = useState(false);
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [otpType, setOtpType] = useState<"phone" | "delete">("phone");
   const [loading, setLoading] = useState(false);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [showNewPhoneModal, setShowNewPhoneModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const handleSendPhoneOtp = async () => {
+    try {
+      await sendOtp(phoneNumber);
+      toast.success("OTP sent to current phone number");
+
+      setOtpType("phone");
+
+      setShowOtpModal(true);
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Failed to send OTP");
+    }
+  };
+
   const handleSaveProfile = async () => {
     try {
       setLoading(true);
@@ -37,12 +55,55 @@ export default function Profile() {
       });
 
       setUser(response.data);
-       toast.success("Changes Saved!");
+      toast.success("Changes Saved!");
     } catch (error) {
       console.error(error);
-       toast.error("Error saving changes!");
+      toast.error("Error saving changes!");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePhoneVerified = () => {
+    setShowOtpModal(false);
+    toast.success("OTP Verified. Enter new number!")
+    setShowNewPhoneModal(true);
+  };
+
+  const handleUpdatePhoneNumber = async () => {
+    try {
+      const response = await updatePhoneNumber(user.id, newPhoneNumber);
+
+      if (!response.success) {
+        toast.error(response.message);
+        return;
+      }
+
+      setUser(response.data);
+      setPhoneNumber(response.data.phoneNumber);
+      toast.success("Phone number updated");
+      setShowConfirmModal(false);
+      setNewPhoneNumber("");
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update phone number");
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUser(user.id);
+
+      toast.success("Account deleted");
+
+      localStorage.clear();
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Failed to delete account");
     }
   };
 
@@ -276,17 +337,12 @@ export default function Profile() {
                 </p>
 
                 <button
-                  onClick={() => {
-                    setOtpType("phone");
-
-                    setShowOtpModal(true);
-                  }}
+                  onClick={handleSendPhoneOtp}
                   className="text-sm text-indigo-500 font-semibold"
                 >
                   Change
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -334,14 +390,52 @@ export default function Profile() {
           </button>
         </div>
       </div>
+      {showNewPhoneModal && (
+        <NewPhoneModal
+          theme={theme}
+          phoneNumber={phoneNumber}
+          newPhoneNumber={newPhoneNumber}
+          setNewPhoneNumber={setNewPhoneNumber}
+          onClose={() => setShowNewPhoneModal(false)}
+          onContinue={() => {
+            setShowNewPhoneModal(false);
 
+            setShowConfirmModal(true);
+          }}
+        />
+      )}
+
+      {showConfirmModal && (
+        <ConfirmPhoneModal
+          theme={theme}
+          newPhoneNumber={newPhoneNumber}
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={handleUpdatePhoneNumber}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteAccountModal
+          theme={theme}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDeleteAccount}
+        />
+      )}
       {showOtpModal && (
         <OtpModal
           title={otpType === "phone" ? "Verify Phone Number" : "Delete Account"}
           subtitle={
             otpType === "phone"
-              ? "Enter OTP to change your phone number"
+              ? `Enter OTP sent to +91 ${phoneNumber}`
               : "Enter OTP to confirm account deletion"
+          }
+          phoneNumber={phoneNumber}
+          onVerified={
+            otpType === "phone"
+              ? handlePhoneVerified
+              : () => {
+                  setShowOtpModal(false);
+                  setShowDeleteModal(true);
+                }
           }
           onClose={() => setShowOtpModal(false)}
         />

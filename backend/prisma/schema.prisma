@@ -57,7 +57,7 @@ model MilkRecord {
 model OTPVerification {
   id String @id @default(uuid())
 
-  phoneNumber String
+  phoneNumber String @unique
 
   otpCode String
 

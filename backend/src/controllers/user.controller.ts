@@ -5,6 +5,7 @@ import {
   updateUserService,
   deleteUserService,
   loginUserService,
+  updatePhoneNumberService
 } from "../services/user.service";
 
 export const createUser = async (req: Request, res: Response) => {
@@ -114,6 +115,24 @@ export const deleteUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to delete user",
+    });
+  }
+};
+export const updatePhoneNumber = async (req: Request, res: Response) => {
+  try {
+    const { userId, phoneNumber } = req.body;
+
+    const user = await updatePhoneNumberService(userId, phoneNumber);
+
+    res.status(200).json({
+      success: true,
+      message: "Phone number updated successfully",
+      data: user,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
     });
   }
 };
