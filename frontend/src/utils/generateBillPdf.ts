@@ -131,7 +131,7 @@ export const generateBillPdf = ({
 
   pdf.setFont("helvetica", "italic");
 
-  pdf.text("Thank you for using Doodhwala App", 20, y);
+  pdf.text("Thank you for using MilkOMeter App", 20, y);
 
   pdf.save(`${selectedMonth}-bill.pdf`);
 };

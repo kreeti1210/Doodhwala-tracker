@@ -9,10 +9,10 @@ import {
   Receipt,
   LogOut,
   User,
-  Droplets,
   ChevronDown,
 } from "lucide-react";
 import toast from "react-hot-toast";
+import AppLogo from "./AppLogo";
 
 const MONTH_OPTIONS = generateMonthOptions();
 
@@ -46,14 +46,11 @@ export default function Navbar() {
       <div className="max-w-[460px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* LEFT */}
         <div className="flex items-center gap-3">
-          <div
-            className={`
-            w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
-            bg-gradient-to-br from-indigo-400 to-indigo-700 shadow-md
-          `}
-          >
-            <Droplets className="w-4 h-4 text-white" strokeWidth={1.5} />
-          </div>
+          <AppLogo
+            theme={theme}
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/60"
+            imageClassName="scale-[1.15]"
+          />
           <div>
             <h1
               className={`
@@ -61,7 +58,7 @@ export default function Navbar() {
               ${isDark ? "text-white" : "text-slate-800"}
             `}
             >
-              Doodhwala
+              MilkOMeter
             </h1>
             <p
               className={`

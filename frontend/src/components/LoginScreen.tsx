@@ -4,9 +4,9 @@ import { loginUser } from "../services/user.service";
 import { sendOtp } from "../services/auth.service";
 import OtpModal from "../modals/OptModal";
 
-import { Droplets } from "lucide-react";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import AppLogo from "./AppLogo";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
@@ -77,19 +77,15 @@ export default function LoginScreen() {
       <div className="w-full max-w-[390px]">
         {/* TOP SECTION */}
         <div className="text-center mb-6">
-          <div
-            className={`
-              inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-3
-
-              ${
-                theme === "light"
-                  ? "bg-gradient-to-br from-sky-600 to-indigo-700 shadow-lg shadow-sky-200"
-                  : "bg-gradient-to-br from-slate-800 to-indigo-900 shadow-lg shadow-slate-950/40"
-              }
-            `}
-          >
-            <Droplets className="w-7 h-7 text-white" strokeWidth={1.5} />
-          </div>
+          <AppLogo
+            theme={theme}
+            className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-3 overflow-hidden ${
+              theme === "light"
+                ? "bg-gradient-to-br from-sky-600 to-indigo-700 shadow-lg shadow-sky-200"
+                : "bg-gradient-to-br from-slate-800 to-indigo-900 shadow-lg shadow-slate-950/40"
+            }`}
+            imageClassName="scale-125"
+          />
 
           <h1
             className={
@@ -98,7 +94,7 @@ export default function LoginScreen() {
                 : "text-2xl font-black text-white tracking-tight"
             }
           >
-            Doodhwala
+            MilkOMeter
           </h1>
 
           <p

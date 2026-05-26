@@ -24,7 +24,7 @@ export const generateShareText = ({
   extraLiters,
 }: ShareBillTextParams) => {
   return `
-Doodhwala - Monthly Milk Bill
+MilkOMeter - Monthly Milk Bill
 
 Customer: ${userName}
 

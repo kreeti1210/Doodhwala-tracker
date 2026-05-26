@@ -74,7 +74,7 @@ export default function Bills() {
 
 const handleDownloadPDF = () => {
   generateBillPdf({
-    appName: "Doodhwala",
+    appName: "MilkOMeter",
     userName: user.name || "Customer",
     selectedMonth,
     totalAmount: summary.totalAmount,
