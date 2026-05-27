@@ -72,8 +72,8 @@ export default function Bills() {
     fetchSummary();
   }, [user.id, month, year]);
 
-const handleDownloadPDF = () => {
-  generateBillPdf({
+const handleDownloadPDF = async () => {
+  await generateBillPdf({
     appName: "MilkOMeter",
     userName: user.name || "Customer",
     selectedMonth,

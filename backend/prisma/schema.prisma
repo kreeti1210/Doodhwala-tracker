@@ -59,11 +59,9 @@ model OTPVerification {
 
   phoneNumber String @unique
 
-  otpCode String
+  verificationId String
 
   verified Boolean @default(false)
-
-  expiresAt DateTime
 
   createdAt DateTime @default(now())
 }

@@ -1,16 +1,17 @@
-import { deleteOtp, findOtpByPhoneNumber, saveOtp } from "../models/otp.model";
-import { generateOtp } from "../utils/generateOtp";
-import { sendOtpMessage } from "./otp.provider";
+import {
+  deleteVerificationId,
+  getVerificationId,
+  saveVerificationId,
+} from "../models/otp.model";
+
+import { sendRealOtp, verifyRealOtp } from "./messageCentral.service";
 
 export const sendOtpService = async (phoneNumber: string) => {
-  const otp = generateOtp();
+  const result = await sendRealOtp(phoneNumber);
 
-  const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+  const verificationId = result?.data?.verificationId;
 
-  await saveOtp(phoneNumber, otp, expiresAt);
-
-  await sendOtpMessage(phoneNumber, otp);
-  console.log(`OTP for ${phoneNumber}: `, otp)
+  await saveVerificationId(phoneNumber, verificationId);
 
   return {
     success: true,
@@ -19,21 +20,18 @@ export const sendOtpService = async (phoneNumber: string) => {
 };
 
 export const verifyOtpService = async (phoneNumber: string, otp: string) => {
-  const existingOtp = await findOtpByPhoneNumber(phoneNumber);
+  const verificationData = await getVerificationId(phoneNumber);
 
-  if (!existingOtp) {
-    throw new Error("OTP not found");
+  if (!verificationData) {
+    return {
+      success: false,
+      message: "OTP session expired",
+    };
   }
 
-  if (new Date() > existingOtp.expiresAt) {
-    throw new Error("OTP expired");
-  }
+  await verifyRealOtp(verificationData.verificationId, otp);
 
-  if (existingOtp.otpCode !== otp) {
-    throw new Error("Invalid OTP");
-  }
-
-  await deleteOtp(phoneNumber);
+  await deleteVerificationId(phoneNumber);
 
   return {
     success: true,

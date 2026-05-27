@@ -11,7 +11,7 @@ type GenerateBillPdfParams = {
   extraLiters: number;
 };
 
-export const generateBillPdf = ({
+export const generateBillPdf = async ({
   appName,
   userName,
   selectedMonth,
@@ -31,12 +31,37 @@ export const generateBillPdf = ({
 
   const pageWidth = pdf.internal.pageSize.getWidth();
 
+  const loadImageDataUrl = async (src: string) => {
+    const response = await fetch(src);
+    const blob = await response.blob();
+
+    return await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error(`Failed to read image: ${src}`));
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const addHeaderLogo = async () => {
+    const logoDataUrl = await loadImageDataUrl("/logo_light.png");
+    const logoWidth = 14;
+    const logoHeight = 14;
+    const logoX = 20;
+    const logoY = 10;
+    const titleX = logoX + logoWidth + 2;
+
+    pdf.addImage(logoDataUrl, "PNG", logoX, logoY, logoWidth, logoHeight);
+    pdf.text(`${appName} App`, titleX, 22);
+  };
+
   // HEADER
   pdf.setFont("helvetica", "bold");
 
   pdf.setFontSize(24);
 
-  pdf.text(`${appName} App`, 20, 22);
+  await addHeaderLogo();
 
   // DOWNLOAD DATE TOP RIGHT
   pdf.setFont("helvetica", "normal");

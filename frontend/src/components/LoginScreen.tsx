@@ -81,7 +81,7 @@ export default function LoginScreen() {
             theme={theme}
             className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-3 overflow-hidden ${
               theme === "light"
-                ? "bg-gradient-to-br from-sky-600 to-indigo-700 shadow-lg shadow-sky-200"
+                ? "bg-gradient-to-br from-sky-600 to-indigo-700 "
                 : "bg-gradient-to-br from-slate-800 to-indigo-900 shadow-lg shadow-slate-950/40"
             }`}
             imageClassName="scale-125"
@@ -100,8 +100,8 @@ export default function LoginScreen() {
           <p
             className={
               theme === "light"
-                ? "text-slate-400 mt-1 text-sm leading-relaxed max-w-[240px] mx-auto"
-                : "text-slate-500 mt-1 text-sm leading-relaxed max-w-[240px] mx-auto"
+                ? "text-slate-500  text-sm leading-relaxed max-w-[240px] mx-auto"
+                : "text-slate-400  text-sm leading-relaxed max-w-[240px] mx-auto"
             }
           >
             Smart milk tracking for your everyday

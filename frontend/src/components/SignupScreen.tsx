@@ -70,15 +70,15 @@ const handleOtpVerified = async () => {
       `}
     >
       <div className="w-full max-w-[390px]">
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <AppLogo
             theme={theme}
             className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-3 overflow-hidden ${
               theme === "light"
-                ? "bg-gradient-to-br from-sky-600 to-indigo-700 shadow-lg shadow-sky-200"
+                ? "bg-gradient-to-br from-sky-600 to-indigo-700 "
                 : "bg-gradient-to-br from-slate-800 to-indigo-900 shadow-lg shadow-slate-950/40"
             }`}
-            imageClassName="scale-125"
+            imageClassName="scale-120"
           />
 
           <h1
@@ -94,8 +94,8 @@ const handleOtpVerified = async () => {
           <p
             className={
               theme === "light"
-                ? "text-slate-400 mt-1 text-sm"
-                : "text-slate-500 mt-1 text-sm"
+                ? "text-slate-500 mb-2 text-sm"
+                : "text-slate-400  mb-2 text-sm"
             }
           >
             Create your account

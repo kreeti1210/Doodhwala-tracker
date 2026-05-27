@@ -9,7 +9,6 @@ export const sendOtpController = async (req: Request, res: Response) => {
     if (!phoneNumber || phoneNumber.length !== 10) {
       return res.status(400).json({
         success: false,
-
         message: "Valid phone number required",
       });
     }
@@ -22,7 +21,6 @@ export const sendOtpController = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-
       message: "Failed to send OTP",
     });
   }
@@ -32,17 +30,26 @@ export const verifyOtpController = async (req: Request, res: Response) => {
   try {
     const { phoneNumber, otp } = req.body;
 
+    if (!phoneNumber || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number and OTP required",
+      });
+    }
+
     const response = await verifyOtpService(phoneNumber, otp);
+
+    if (!response.success) {
+      return res.status(400).json(response);
+    }
 
     return res.status(200).json(response);
   } catch (error) {
     console.error(error);
 
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
-
-      message:
-        error instanceof Error ? error.message : "OTP verification failed",
+      message: "OTP verification failed",
     });
   }
 };

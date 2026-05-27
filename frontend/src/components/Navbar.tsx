@@ -45,11 +45,11 @@ export default function Navbar() {
     >
       <div className="max-w-[460px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* LEFT */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <AppLogo
             theme={theme}
-            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/60"
-            imageClassName="scale-[1.15]"
+            className="w-10 h-10 rounded-full flex items-center justify-center  overflow-hidden"
+            imageClassName="scale-[1.10]"
           />
           <div>
             <h1

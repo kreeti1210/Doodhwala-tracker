@@ -1,9 +1,8 @@
 import prisma from "../db/prisma";
 
-export const saveOtp = async (
+export const saveVerificationId = async (
   phoneNumber: string,
-  otp: string,
-  expiresAt: Date,
+  verificationId: string,
 ) => {
   return prisma.oTPVerification.upsert({
     where: {
@@ -11,34 +10,25 @@ export const saveOtp = async (
     },
 
     update: {
-      otpCode: otp,
-
-      expiresAt,
-
-      verified: false,
+      verificationId,
     },
 
     create: {
       phoneNumber,
-
-      otpCode: otp,
-
-      expiresAt,
-
-      verified: false,
+      verificationId,
     },
   });
 };
 
-export const findOtpByPhoneNumber = async (phoneNumber: string) => {
-  return prisma.oTPVerification.findFirst({
+export const getVerificationId = async (phoneNumber: string) => {
+  return prisma.oTPVerification.findUnique({
     where: {
       phoneNumber,
     },
   });
 };
 
-export const deleteOtp = async (phoneNumber: string) => {
+export const deleteVerificationId = async (phoneNumber: string) => {
   return prisma.oTPVerification.deleteMany({
     where: {
       phoneNumber,
