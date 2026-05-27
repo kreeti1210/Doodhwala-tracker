@@ -27,7 +27,6 @@ export default function Navbar() {
   const clearUser = useMilkStore((state) => state.clearUser);
   const setPhoneNumber = useMilkStore((state) => state.setPhoneNumber);
   const user = useMilkStore((state) => state.user);
-  const [name, setName] = useState(user?.name || "");
   const isDark = theme === "dark";
 
   return (
