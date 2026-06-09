@@ -1,6 +1,6 @@
-# Doodhwala Milk Tracker
+# Milkometer - Doodhwala Milk Tracker
 
-Doodhwala is a simple milk tracking application built for Indian households to help manage daily milk delivery records, monthly bills, and delivery history in an easy and organized way.
+Milkometer is a simple milk tracking application built for Indian households to help manage daily milk delivery records, monthly bills, and delivery history in an easy and organized way.
 
 The idea behind this app is to help housewives and families avoid manually remembering:
 - how much milk was delivered,
@@ -8,7 +8,7 @@ The idea behind this app is to help housewives and families avoid manually remem
 - monthly total expenses,
 - and daily delivery tracking.
 
-Instead of maintaining handwritten notes or WhatsApp messages, Doodhwala keeps everything in one place with a clean and simple interface.
+Instead of maintaining handwritten notes or WhatsApp messages, Milkometer keeps everything in one place with a clean and simple interface.
 
 ---
 
@@ -26,7 +26,11 @@ Instead of maintaining handwritten notes or WhatsApp messages, Doodhwala keeps e
 - Responsive mobile-first UI
 
 ---
+## Visit Us
 
+URL : https://milkometer.vercel.app/
+
+---
 ## Tech Stack
 
 ### Frontend
@@ -47,16 +51,31 @@ Instead of maintaining handwritten notes or WhatsApp messages, Doodhwala keeps e
 
 ---
 
-## Future Improvements
+## App visuals
 
-- OTP authentication
-- SMS integration
-- Push notifications
-- Vendor management
-- Expense analytics
-- Multi-user family support
-- PWA support
+### Signup and Login
+![Signup](./frontend/public/signup_light.png)
+![Signup](./frontend/public/signup_dark.png)
+![Login](./frontend/public/login_dark.png)
 
+### Dashboard
+![Dashboard](./frontend/public/dashboard_light.png)
+![Dashboard](./frontend/public/dashboard_dark.png)
+
+### Setting
+
+![Settings](./frontend/public/setting_section.png)
+![Settings](./frontend/public/setting_section_dark.png)
+
+### Billing
+![Billings](./frontend/public/billing_section.png)
+ 
+ ### Activity Log
+
+![Log](./frontend/public/activity_log.png)
+
+### Milk updation
+![Milk](./frontend/public/milk_updation.png)
 ---
 
 

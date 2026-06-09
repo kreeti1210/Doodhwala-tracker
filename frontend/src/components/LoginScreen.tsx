@@ -15,6 +15,7 @@ export default function LoginScreen() {
   const phoneNumber = useMilkStore((state) => state.phoneNumber);
   const setPhoneNumber = useMilkStore((state) => state.setPhoneNumber);
   const [showOtpModal, setShowOtpModal] = useState(false);
+  
  const handleContinue = async () => {
    try {
      if (!phoneNumber) {
